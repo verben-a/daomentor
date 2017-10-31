@@ -99,21 +99,33 @@ def signup_post():
     return redirect(url_for("profile"))
 
 
-@app.route("/profile/", methods=["GET"])
-@login_required
+@app.route("/view/<profile_id>", methods=["GET"])
+def profile_view():
+    return render_template("profile.html")
+
+@app.route("/profile/<profile_id>", methods=["GET", "PUT", "DELETE"])
+# @login_required
 def profile():
     # import pdb; pdb.set_trace()
     return render_template("profile.html")
 
 
-# @app.route("/profiles/", methods=["GET"])
+@app.route("/dashboard/mentors/<page>", methods=["GET"])
 # @login_required
-# def profiles():
-#     profiles = session.query(Profile)
-#     profiles = profiles.order_by(Profile.name.desc())
-#     profiles = profiles.all()
-#     return render_template("profiles.html", profiles=profiles
-#                            )
+def mentors_profiles():
+    profiles = session.query(Profile)
+    profiles = profiles.order_by(Profile.name.desc())
+    profiles = profiles.all()
+    return render_template("profiles.html", profiles=profiles
+                           )
+
+@app.route("/dashboard/mentees/<page>", methods=["GET"])
+def mentees_profiles():
+    profiles = session.query(Profile)
+    profiles = profiles.order_by(Profile.name.desc())
+    profiles = profiles.all()
+    return render_template("profiles.html", profiles=profiles
+                           )
 
 
 # @app.route("/logout/")

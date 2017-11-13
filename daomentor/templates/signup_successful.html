@@ -1,0 +1,40 @@
+{% extends "base.html" %} {% block content %}
+<div>
+    <h1>SIGN UP SUCCESSFUL</h1>
+    <section class="signup-form">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <form role="form" method="POST">
+                	<div class="col-md-4">
+                    <div class="form-group">
+                       
+                        <label for="experience">Experience</label>
+                        <input type="company-name" class="form-control" id="company-name" name="company-name" placeholder="Company Name" required>
+                        <input type="position-name" class="form-control" id="position-name" name="position-name" placeholder="Position Name" required>
+                        <input type="position-summary" class="form-control" id="position-summary" name="position-summary" placeholder="Position Summary" required>
+                        <label for="education">Education</label>
+                        <input type="university-name" class="form-control" id="university-name" name="university-name" placeholder="University Name" required>
+                        <input type="major-name" class="form-control" id="major-name" name="major-name" placeholder="Major Name" required>
+                        <input type="education-summary" class="form-control" id="education-summary" name="education-summary" placeholder="Education Summary" required>
+                        <label for="languages">Laguages</label>
+                        <input type="language-name" class="form-control" id="language-name" name="language-name" placeholder="Language" required>
+                        <label for="skills">Skills</label>
+                        <input type="skills" class="form-control" id="skills" name="skills" placeholder="skills">
+                        <label for="service">Services</label>
+                        <input type="service-name" class="form-control" id="service-name" name="service-name" placeholder="Service Name">
+                        <input type="cost" class="form-control" id="cost" name="cost" placeholder="Cost">
+                        <!-- <label for="facebook">Facebook</label>
+                        <input type="facebook" class="form-control" id="facebook" name="facebook" placeholder="facebook">
+                        <label for="linkedin">Linkedin</label>
+                        <input type="linkedin" class="form-control" id="linkedin" name="linkedin" placeholder="linkedin"> -->
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+</div>
+{% endblock %}

@@ -13,7 +13,7 @@ class User(Base, UserMixin):
 	password = Column(String(128))
 	is_mentor = Column(Boolean, default=False)
 
-	profile = relationship("Profile", uselist=False, backref="users")
+	profile = relationship("Profile")
 
 class Profile(Base):
 	"""docstring for Profile
@@ -24,19 +24,19 @@ class Profile(Base):
 	id = Column(Integer, Sequence('profile_id_seq'), primary_key=True)
 	name_surname = Column(String(100))
 	summary = Column(String(300))
-	position_at_company = Column(String(300)) 
-	experiences = relationship("Experience", backref="experiences")
-	educations = relationship("Education", backref="educations") 
+	position_at_company = Column(String(300))
+	educations = relationship("Education")
 	location = Column(String(100))
-	languages = relationship("Language", backref="languages")
+	languages = relationship("Language")
 	skills = relationship("Skill", backref="skills")
 	photo = Column(String(300))
 	service = relationship("Service", backref="services")
 	linkedin = Column(String(300))
 	facebook = Column(String(300))
+	experiences = relationship("Experience")
 
 	user_id = Column(Integer, ForeignKey('users.id'), nullable = False)
-	user = relationship("User", backref="profile")
+	user = relationship("User", backref="profiles")
 		
 
 class Experience(Base):
@@ -48,7 +48,8 @@ class Experience(Base):
 	position_name = Column(String(100))
 	position_summary = Column(String(300))
 
-	profile_id = Column(Integer, ForeignKey("profile.id"), nullable=False)
+	profile_id = Column(Integer, ForeignKey("profiles.id"))
+	profile = relationship("Profile", back_populates="experiences")
 
 class Education(Base):
 	"""docstring for education"""
@@ -59,7 +60,7 @@ class Education(Base):
 	major_name = Column(String(300))
 	education_summary = Column(String(400))
 
-	profile_id = Column(Integer, ForeignKey("profile.id"), nullable=False)
+	profile_id = Column(Integer, ForeignKey("profiles.id"))
 
 class Language(Base):
 	"""docstring for Language"""
@@ -68,7 +69,7 @@ class Language(Base):
 	id = Column(Integer, Sequence('language_id_seq'), primary_key=True)
 	language_name = Column(String(50))
 
-	profile_id = Column(Integer, ForeignKey("profile.id"), nullable=False)
+	profile_id = Column(Integer, ForeignKey("profiles.id"))
 
 class Skill(Base):
 	"""docstring for Skill"""
@@ -77,7 +78,7 @@ class Skill(Base):
 	id = Column(Integer, Sequence('skill_id_seq'), primary_key=True)
 	skill_name = Column(String(70))
 
-	profile_id = Column(Integer, ForeignKey("profile.id"), nullable=False)
+	profile_id = Column(Integer, ForeignKey("profiles.id"))
 
 class Service(Base):
 	"""docstring for Service"""
@@ -87,9 +88,4 @@ class Service(Base):
 	service_name = Column(String(50))
 	cost = Column(Float)
 
-	profile_id = Column(Integer, ForeignKey("profile.id"), nullable=False)
-
-
-	
-		
-
+	profile_id = Column(Integer, ForeignKey("profiles.id"))

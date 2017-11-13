@@ -12,7 +12,7 @@ import os
 
 from . import app
 from .database import session  # not known yet.
-from .models import User, Profile
+from .models import User, Profile, Experience, Education, Language, Skill, Service
 
 
 @app.route("/")
@@ -36,24 +36,28 @@ def about():
     return render_template("about.html")
 
 
-@app.route("/login", methods=["GET", "POST"])
-def login():
+@app.route("/login", methods=["GET"])
+def login_get():
 
-    # GET
+    return render_template('login.html')    
+
+    # POST
+@app.route("/login", methods=["POST"])
+def login_post():
 
     email = request.form.get('email') # or request.form['email']
     password = request.form.get('password')
 
-    # POST
-
     user = session.query(User).filter(User.email==email).first()
-    
+
     if not user or not check_password_hash(user.password, password):
         flash("Incorrect username or password", "danger") 
+        print("user: ", user)
+        # return render_template('login_successful.html')
         return redirect(url_for("login"))
 
     login_user(user)
-    return redirect(request.args.get('next') or url_for("profile"))
+    return redirect(request.args.get('next') or url_for("profiles"))
 
 
 @app.route("/signup")
@@ -67,16 +71,9 @@ def signup_post():
     name_surname = request.form.get('name_surname')  
     email = request.form.get('email')
     password = request.form.get('password')
+    summary = request.form.get('summary')
     position_at_company = request.form.get('position_at_company')
-    experience = request.form.get('experience')
-    education = request.form.get('education')
     location = request.form.get('location')
-    language = request.form.get('language')
-    skills = request.form.get('skill')
-    service = request.form.get('service')
-    linkedin = request.form.get('linkedin')
-    facebook = request.form.get('facebook')
-    # photo
     
     password = generate_password_hash(password)
 
@@ -84,19 +81,68 @@ def signup_post():
 
     profile = Profile(name_surname=name_surname,
                       position_at_company=position_at_company,
-                      experience = experience,
-                      location=location,
-                      education = education,
-                      language = language,
-                      skills = skills,
-                      service = service,
-                      linkedin = linkedin,
-                      facebook=facebook)
-    user.profile = profile
+                      summary=summary,
+                      location=location
+                      )
+    print (type(user))
+
+    user.profile = [profile]
 
     session.add(user)
     session.commit()
-    return redirect(url_for("profile"))
+    return redirect(url_for("add_info"))
+    # return redirect(url_for("profile"))
+
+@app.route("/add_info", methods=["GET","POST"])
+def add_info():
+
+    if request.method == "GET":
+        render_template("signup_successful.html")
+
+    else:
+
+        experience = request.form.get('experience')
+        education = request.form.get('education')
+        language = request.form.get('language')
+        skills = request.form.get('skill')
+        service = request.form.get('service')
+    # linkedin = request.form.get('linkedin')
+    # facebook = request.form.get('facebook')
+    # photo
+
+    experience = Experience(company_name = company_name, 
+                            position_name = position_name,
+                            position_summary = position_summary)
+
+    education = Education(university_name = university_name,
+                          major_name = major_name,
+                          education_summary = education_summary)
+
+    language = Language(language_name = language_name)
+
+    skill = Skill(skill_name = skill_name)
+
+    service = Service(service_name = service_name,
+                      cost = cost)
+
+    # linkedin = Linkedin()
+
+    # facebook = Facebook()
+
+    profile.experience = [experience]
+
+    profile.education = [education]
+
+    profile.language = [language]
+
+    profile.skill = [skill]
+
+    profile.service = [service]
+
+    session.add(profile)
+    session.commit()
+
+    return redirect(url_for("profile/<profile_id>"))
 
 
 @app.route("/view/<profile_id>", methods=["GET"])

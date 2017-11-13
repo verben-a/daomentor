@@ -40,15 +40,19 @@ create table services (id serial PRIMARY KEY,
 	cost float,
 	profile_id integer references profiles(id));
 
--- profile_id integer references experiences(id),
--- profile_id integer references educations(id),
--- profile_id integer references languages(id),
--- profile_id integer references skills(id),
--- profile_id integer references services(id),
 
+# CREATE SEQUENCE user_id_seq START 101;
 
--- experience_id integer references experiences(id),
-	-- education_id integer references educations(id),
-	-- language_id integer references languages(id),
-	-- skills_id integer references skills(id),
-	-- service_id integer references services(id),
+# CREATE SEQUENCE profile_id_seq START 101;
+
+# CREATE SEQUENCE experience_id_seq START 101;
+
+# CREATE SEQUENCE language_id_seq START 101;
+
+# CREATE SEQUENCE edu_id_seq START 101;
+
+# CREATE SEQUENCE skill_id_seq START;
+
+# CREATE SEQUENCE skill_id_seq START 101;
+
+# CREATE SEQUENCE service_id_seq START 101;

@@ -99,13 +99,25 @@ def add_info():
     if request.method == "GET":
         render_template("signup_successful.html")
 
-    else:
+    elif request.method == "POST":
+        
+        print("signup successful!!!")
+        # experience = request.form.get('experience')
+        company_name = request.form.get('company_name')
+        position_name = request.form.get('position_name')
+        position_summary = request.form.get('position_summary')
+        # education = request.form.get('education')
+        university_name = request.form.get('university_name')
+        major_name = request.form.get('major_name')
+        education_summary = request.form.get('education_summary')
+        # language = request.form.get('language')
+        language_name = request.form.get('language_name')
+        # skills = request.form.get('skill')
+        skill_name = request.form.get('skill_name')
+        # service = request.form.get('service')
+        service_name = request.form.get('service_name')
+        cost = request.form.get('cost')
 
-        experience = request.form.get('experience')
-        education = request.form.get('education')
-        language = request.form.get('language')
-        skills = request.form.get('skill')
-        service = request.form.get('service')
     # linkedin = request.form.get('linkedin')
     # facebook = request.form.get('facebook')
     # photo
@@ -140,6 +152,11 @@ def add_info():
     profile.service = [service]
 
     session.add(profile)
+    session.add(experience)
+    session.add(education)
+    session.add(language)
+    session.add(skill)
+    session.add(service)
     session.commit()
 
     return redirect(url_for("profile/<profile_id>"))

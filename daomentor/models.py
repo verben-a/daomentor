@@ -41,7 +41,7 @@ class Profile(Base):
 
 class Experience(Base):
 	"""docstring for Position"""
-	__tablename__= "experience"
+	__tablename__= "experiences"
 
 	id = Column(Integer, Sequence('experience_id_seq'), primary_key=True)
 	company_name = Column(String(100))
@@ -53,7 +53,7 @@ class Experience(Base):
 
 class Education(Base):
 	"""docstring for education"""
-	__tablename__= "education"
+	__tablename__= "educations"
 
 	id = Column(Integer, Sequence('edu_id_seq'), primary_key=True)
 	university_name = Column(String(300))
@@ -64,7 +64,7 @@ class Education(Base):
 
 class Language(Base):
 	"""docstring for Language"""
-	__tablename__="language"
+	__tablename__="languages"
 
 	id = Column(Integer, Sequence('language_id_seq'), primary_key=True)
 	language_name = Column(String(50))
@@ -73,7 +73,7 @@ class Language(Base):
 
 class Skill(Base):
 	"""docstring for Skill"""
-	__tablename__="skill"
+	__tablename__="skills"
 
 	id = Column(Integer, Sequence('skill_id_seq'), primary_key=True)
 	skill_name = Column(String(70))
@@ -82,7 +82,7 @@ class Skill(Base):
 
 class Service(Base):
 	"""docstring for Service"""
-	__tablename__="service"
+	__tablename__="services"
 
 	id = Column(Integer, Sequence('service_id_seq'), primary_key=True)
 	service_name = Column(String(50))

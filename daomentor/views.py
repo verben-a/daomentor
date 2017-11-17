@@ -90,18 +90,18 @@ def signup_post():
 
     session.add(user)
     session.commit()
+    login_user(user)
     return redirect(url_for("add_info"))
-    # return redirect(url_for("profile"))
 
 @app.route("/add_info", methods=["GET","POST"])
 def add_info():
 
     if request.method == "GET":
-        render_template("signup_successful.html")
+        return render_template("signup_successful.html")
 
     elif request.method == "POST":
         
-        print("signup successful!!!")
+        print(str(current_user))
         # experience = request.form.get('experience')
         company_name = request.form.get('company_name')
         position_name = request.form.get('position_name')
@@ -122,51 +122,57 @@ def add_info():
     # facebook = request.form.get('facebook')
     # photo
 
-    experience = Experience(company_name = company_name, 
+        experience = Experience(company_name = company_name, 
                             position_name = position_name,
                             position_summary = position_summary)
 
-    education = Education(university_name = university_name,
+        education = Education(university_name = university_name,
                           major_name = major_name,
                           education_summary = education_summary)
 
-    language = Language(language_name = language_name)
+        language = Language(language_name = language_name)
 
-    skill = Skill(skill_name = skill_name)
+        skill = Skill(skill_name = skill_name)
 
-    service = Service(service_name = service_name,
+        service = Service(service_name = service_name,
                       cost = cost)
 
     # linkedin = Linkedin()
 
     # facebook = Facebook()
 
-    profile.experience = [experience]
+        # profile.experience = [experience]
 
-    profile.education = [education]
+        # profile.education = [education]
 
-    profile.language = [language]
+        # profile.language = [language]
 
-    profile.skill = [skill]
+        # profile.skill = [skill]
 
-    profile.service = [service]
+        # profile.service = [service]
 
-    session.add(profile)
-    session.add(experience)
-    session.add(education)
-    session.add(language)
-    session.add(skill)
-    session.add(service)
-    session.commit()
+        # experience.profile = current_user.profile.experience
+        # education.profile = current_user.profile.education
+        # language.profile = current_user.profile.language
+        # skill.profile = current_user.profile.skill
+        # service.profile = current_user.profile.service
 
-    return redirect(url_for("profile/<profile_id>"))
+        # session.add(profile)
+        session.add(experience)
+        session.add(education)
+        session.add(language)
+        session.add(skill)
+        session.add(service)
+        session.commit()
+
+        return redirect(url_for("profile"))
 
 
 @app.route("/view/<profile_id>", methods=["GET"])
 def profile_view():
     return render_template("profile.html")
 
-@app.route("/profile/<profile_id>", methods=["GET", "PUT", "DELETE"])
+@app.route("/profile/", methods=["GET", "PUT", "DELETE"])
 # @login_required
 def profile():
     # import pdb; pdb.set_trace()

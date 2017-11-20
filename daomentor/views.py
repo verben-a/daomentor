@@ -41,10 +41,10 @@ def login_get():
 
     return render_template('login.html')    
 
-    # POST
 @app.route("/login", methods=["POST"])
 def login_post():
 
+    print("I'm inside login_post")
     email = request.form.get('email') # or request.form['email']
     password = request.form.get('password')
 
@@ -53,11 +53,12 @@ def login_post():
     if not user or not check_password_hash(user.password, password):
         flash("Incorrect username or password", "danger") 
         print("user: ", user)
-        # return render_template('login_successful.html')
         return redirect(url_for("login"))
 
     login_user(user)
-    return redirect(request.args.get('next') or url_for("profiles"))
+    return redirect(url_for("profile"))
+
+    # request.args.get('next') or
 
 
 @app.route("/signup")
@@ -77,23 +78,33 @@ def signup_post():
     
     password = generate_password_hash(password)
 
-    user = User(email=email, password=password)
+    email_duplicate = session.query(User).filter(User.email==email).first()
 
-    profile = Profile(name_surname=name_surname,
-                      position_at_company=position_at_company,
-                      summary=summary,
-                      location=location
-                      )
-    print (type(user))
+    if not email_duplicate:
 
-    user.profile = [profile]
+        user = User(email=email, password=password)
 
-    session.add(user)
-    session.commit()
-    login_user(user)
-    return redirect(url_for("add_info"))
+        profile = Profile(name_surname=name_surname,
+                          position_at_company=position_at_company,
+                          summary=summary,
+                          location=location
+                          )
+        print (type(user))
+
+        user.profile = [profile]
+
+        session.add(user)
+        session.commit()
+        login_user(user)
+        return redirect(url_for("add_info"))
+
+    else:
+        flash("ERROR! Email already exists.")
+        return render_template("sign_up.html")
+
 
 @app.route("/add_info", methods=["GET","POST"])
+@login_required
 def add_info():
 
     if request.method == "GET":
@@ -169,18 +180,19 @@ def add_info():
 
 
 @app.route("/view/<profile_id>", methods=["GET"])
+@login_required
 def profile_view():
     return render_template("profile.html")
 
 @app.route("/profile/", methods=["GET", "PUT", "DELETE"])
-# @login_required
+@login_required
 def profile():
     # import pdb; pdb.set_trace()
     return render_template("profile.html")
 
 
 @app.route("/dashboard/mentors/<page>", methods=["GET"])
-# @login_required
+@login_required
 def mentors_profiles():
     profiles = session.query(Profile)
     profiles = profiles.order_by(Profile.name.desc())
@@ -189,6 +201,7 @@ def mentors_profiles():
                            )
 
 @app.route("/dashboard/mentees/<page>", methods=["GET"])
+@login_required
 def mentees_profiles():
     profiles = session.query(Profile)
     profiles = profiles.order_by(Profile.name.desc())
@@ -197,11 +210,11 @@ def mentees_profiles():
                            )
 
 
-# @app.route("/logout/")
-# @login_required
-# def logout():
-#     logout_user()
-#     return redirect(url_for("home"))
+@app.route("/logout/")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for("home"))
 
 # @app.route("/profile/edit/", methods=["GET"])
 # @login_required

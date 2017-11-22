@@ -96,6 +96,7 @@ def signup_post():
         session.add(user)
         session.commit()
         login_user(user)
+        print(str(current_user.is_authenticated))
         return redirect(url_for("add_info"))
 
     else:
@@ -188,6 +189,7 @@ def profile_view():
 @login_required
 def profile():
     # import pdb; pdb.set_trace()
+    print(str(current_user.is_authenticated))
     return render_template("profile.html")
 
 
@@ -216,51 +218,65 @@ def logout():
     logout_user()
     return redirect(url_for("home"))
 
-# @app.route("/profile/edit/", methods=["GET"])
+@app.route("/profile/edit/", methods=["GET"])
 # @login_required
-# def profile_edit_get():
-#     # fetch the user
+def profile_edit_get():
 
-#     return render_template("edit_profile.html", name = current_user.profile.name, 
-#         surname = current_user.profile.surname, 
-#         email = current_user.email,
-#         # password = current_user.password,
-#         faculty = current_user.profile.faculty,
-#         location = current_user.profile.location,
-#         industry = current_user.profile.industry,
-#         year = current_user.profile.year,
-#         company = current_user.profile.company,
-#         position = current_user.profile.position,
-#         expertise = current_user.profile.expertise)
+    print(current_user)
 
-# @app.route("/profile/edit/", methods=["PUT", "POST"])
+    return render_template("edit_profile.html", 
+        name_surname = current_user.profile.name_surname, 
+        email = current_user.email,
+        password = current_user.password,
+        summary = current_user.profile.summary,
+        position_at_company = current_user.profile.position_at_company,
+        location = current_user.profile.location,
+        company_name = current_user.profile.company_name,
+        position_name = current_user.profile.position_name,
+        position_summary = current_user.profile.position_summary,
+        university_name = current_user.profile.university_name,
+        major_name = current_user.profile.major_name,
+        education_summary = current_user.profile.education_summary,
+        language_name = current_user.profile.language_name,
+        skill_name = current_user.profile.skill_name,
+        service_name = current_user.profile.service_name,
+        cost = current_user.profile.cost)
+
+@app.route("/profile/edit/", methods=["PUT", "POST"])
 # @login_required
-# def profile_edit_post():
-#     # import pdb; pdb.set_trace() # debugging -- stops it for investigations    
-#     user = session.query(User).get(current_user.id)
-#     user.profile.name = request.form.get('name') 
-#     user.profile.surname = request.form.get('surname')
-#     user.email = request.form.get('email')
-#     if request.form.get("password") != "":
-#         user.password = generate_password_hash(request.form.get('password'))
-#     user.profile.faculty = request.form.get('faculty')
-#     user.profile.location = request.form.get('location')
-#     user.profile.industry = request.form.get('industry')
-#     user.profile.year = request.form.get('year')
-#     user.profile.company = request.form.get('company')
-#     user.profile.position = request.form.get('position')
-#     user.profile.expertise = request.form.get('expertise')
+def profile_edit_post():
+    print(user.profile)
+    # import pdb; pdb.set_trace() # debugging -- stops it for investigations    
+    user = session.query(User).get(current_user.id)
+    profile = user.profile[0]
+    profile.name_surname = request.form.get('name_surname') 
+    user.email = request.form.get('email')
+    if request.form.get("password") != "":
+        user.password = generate_password_hash(request.form.get('password'))
+    user.profile.summary = request.form.get('summary')
+    user.profile.position_at_company = request.form.get('position_at_company')
+    user.profile.location = request.form.get('location')
+    user.profile.company_name = request.form.get('company_name')
+    user.profile.position_name = request.form.get('position_name')
+    user.profile.position_summary = request.form.get('position_summary')
+    user.profile.university_name = request.form.get('university_name')
+    user.profile.major_name = request.form.get('major_name')
+    user.profile.education_summary = request.form.get('education_summary')
+    user.profile.language_name = request.form.get('language_name')
+    user.profile.skill_name = request.form.get('skill_name')
+    user.profile.service_name = request.form.get('service_name')
+    user.profile.cost = request.form.get('cost')
 
-#     if request.files:
-#         # your code goes here
-#         file_to_upload = request.files['file']
+    # if request.files:
+    #     # your code goes here
+    #     file_to_upload = request.files['file']
 
-#         if file_to_upload:
-#             upload_result = upload(file_to_upload)
-#             thumbnail_url, options = cloudinary_url(upload_result['public_id'], format="jpg", crop="fill", width=150, height=150)
-#             user.profile.photo = thumbnail_url
+    #     if file_to_upload:
+    #         upload_result = upload(file_to_upload)
+    #         thumbnail_url, options = cloudinary_url(upload_result['public_id'], format="jpg", crop="fill", width=150, height=150)
+    #         user.profile.photo = thumbnail_url
             
 
-#     session.commit()
+    session.commit()
 
-#     return redirect(url_for("profile"))
+    return redirect(url_for("profile"))

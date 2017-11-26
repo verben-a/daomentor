@@ -25,7 +25,7 @@ class Profile(Base):
 	name_surname = Column(String(100))
 	summary = Column(String(300))
 	position_at_company = Column(String(300))
-	educations = relationship("Education")
+	educations = relationship("Education", backref="educations")
 	location = Column(String(100))
 	languages = relationship("Language")
 	skills = relationship("Skill", backref="skills")
@@ -33,7 +33,7 @@ class Profile(Base):
 	service = relationship("Service", backref="services")
 	linkedin = Column(String(300))
 	facebook = Column(String(300))
-	experiences = relationship("Experience")
+	experiences = relationship("Experience", backref="experiences")
 
 	user_id = Column(Integer, ForeignKey('users.id'), nullable = False)
 	user = relationship("User", backref="profiles")

@@ -153,21 +153,23 @@ def add_info():
 
     # facebook = Facebook()
 
-        # profile.experience = [experience]
+    # STARTING FROM HERE
 
-        # profile.education = [education]
+        profile.experience = [experience]
 
-        # profile.language = [language]
+        profile.education = [education]
 
-        # profile.skill = [skill]
+        profile.language = [language]
 
-        # profile.service = [service]
+        profile.skill = [skill]
 
-        # experience.profile = current_user.profile.experience
-        # education.profile = current_user.profile.education
-        # language.profile = current_user.profile.language
-        # skill.profile = current_user.profile.skill
-        # service.profile = current_user.profile.service
+        profile.service = [service]
+
+        experience.profile = current_user.profile.experience
+        education.profile = current_user.profile.education
+        language.profile = current_user.profile.language
+        skill.profile = current_user.profile.skill
+        service.profile = current_user.profile.service
 
         # session.add(profile)
         session.add(experience)
@@ -223,24 +225,23 @@ def logout():
 def profile_edit_get():
 
     print(current_user)
-
     return render_template("edit_profile.html", 
-        name_surname = current_user.profile.name_surname, 
+        name_surname = current_user.profile[0].name_surname, 
         email = current_user.email,
         password = current_user.password,
-        summary = current_user.profile.summary,
-        position_at_company = current_user.profile.position_at_company,
-        location = current_user.profile.location,
-        company_name = current_user.profile.company_name,
-        position_name = current_user.profile.position_name,
-        position_summary = current_user.profile.position_summary,
-        university_name = current_user.profile.university_name,
-        major_name = current_user.profile.major_name,
-        education_summary = current_user.profile.education_summary,
-        language_name = current_user.profile.language_name,
-        skill_name = current_user.profile.skill_name,
-        service_name = current_user.profile.service_name,
-        cost = current_user.profile.cost)
+        summary = current_user.profile[0].summary,
+        position_at_company = current_user.profile[0].position_at_company,
+        location = current_user.profile[0].location,
+        company_name = current_user.profile[0].experiences.company_name,
+        position_name = current_user.profile[0].experiences.position_name,
+        position_summary = current_user.profile[0].experiences.position_summary,
+        university_name = current_user.profile[0].university_name,
+        major_name = current_user.profile[0].major_name,
+        education_summary = current_user.profile[0].education_summary,
+        language_name = current_user.profile[0].language_name,
+        skill_name = current_user.profile[0].skill_name,
+        service_name = current_user.profile[0].service_name,
+        cost = current_user.profile[0].cost)
 
 @app.route("/profile/edit/", methods=["PUT", "POST"])
 # @login_required
@@ -248,8 +249,8 @@ def profile_edit_post():
     print(user.profile)
     # import pdb; pdb.set_trace() # debugging -- stops it for investigations    
     user = session.query(User).get(current_user.id)
-    profile = user.profile[0]
-    profile.name_surname = request.form.get('name_surname') 
+    # profile = user.profile[0]
+    user.profile.name_surname = request.form.get('name_surname') 
     user.email = request.form.get('email')
     if request.form.get("password") != "":
         user.password = generate_password_hash(request.form.get('password'))

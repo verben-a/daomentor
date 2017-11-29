@@ -17,7 +17,6 @@ class User(Base, UserMixin):
 
 class Profile(Base):
 	"""docstring for Profile
-
 	ONE -_ > relationship"""
 	__tablename__ = "profiles"
 
@@ -30,7 +29,7 @@ class Profile(Base):
 	languages = relationship("Language")
 	skills = relationship("Skill", backref="skills")
 	photo = Column(String(300))
-	service = relationship("Service", backref="services")
+	services = relationship("Service", backref="services")
 	linkedin = Column(String(300))
 	facebook = Column(String(300))
 	experiences = relationship("Experience", backref="experiences")

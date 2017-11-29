@@ -104,10 +104,9 @@ def signup_post():
         return render_template("sign_up.html")
 
 
-@app.route("/add_info", methods=["GET","POST"])
-@login_required
+@app.route("/add_info", methods=["GET","POST"]) 
+@login_required 
 def add_info():
-
     if request.method == "GET":
         return render_template("signup_successful.html")
 
@@ -134,20 +133,32 @@ def add_info():
     # facebook = request.form.get('facebook')
     # photo
 
+
+
         experience = Experience(company_name = company_name, 
                             position_name = position_name,
                             position_summary = position_summary)
+
+        experience.profile_id = current_user.profile[0].id
 
         education = Education(university_name = university_name,
                           major_name = major_name,
                           education_summary = education_summary)
 
+        education.profile_id = current_user.profile[0].id
+
         language = Language(language_name = language_name)
+
+        language.profile_id = current_user.profile[0].id
 
         skill = Skill(skill_name = skill_name)
 
+        skill.profile_id = current_user.profile[0].id
+
         service = Service(service_name = service_name,
                       cost = cost)
+
+        service.profile_id = current_user.profile[0].id
 
     # linkedin = Linkedin()
 
@@ -155,21 +166,12 @@ def add_info():
 
     # STARTING FROM HERE
 
-        profile.experience = [experience]
 
-        profile.education = [education]
-
-        profile.language = [language]
-
-        profile.skill = [skill]
-
-        profile.service = [service]
-
-        experience.profile = current_user.profile.experience
-        education.profile = current_user.profile.education
-        language.profile = current_user.profile.language
-        skill.profile = current_user.profile.skill
-        service.profile = current_user.profile.service
+        experience.profile = current_user.profile
+        education.profile = current_user.profile
+        language.profile = current_user.profile
+        skill.profile = current_user.profile
+        service.profile = current_user.profile
 
         # session.add(profile)
         session.add(experience)
@@ -180,6 +182,7 @@ def add_info():
         session.commit()
 
         return redirect(url_for("profile"))
+
 
 
 @app.route("/view/<profile_id>", methods=["GET"])
@@ -221,9 +224,8 @@ def logout():
     return redirect(url_for("home"))
 
 @app.route("/profile/edit/", methods=["GET"])
-# @login_required
+@login_required
 def profile_edit_get():
-
     print(current_user)
     return render_template("edit_profile.html", 
         name_surname = current_user.profile[0].name_surname, 
@@ -232,16 +234,12 @@ def profile_edit_get():
         summary = current_user.profile[0].summary,
         position_at_company = current_user.profile[0].position_at_company,
         location = current_user.profile[0].location,
-        company_name = current_user.profile[0].experiences.company_name,
-        position_name = current_user.profile[0].experiences.position_name,
-        position_summary = current_user.profile[0].experiences.position_summary,
-        university_name = current_user.profile[0].university_name,
-        major_name = current_user.profile[0].major_name,
-        education_summary = current_user.profile[0].education_summary,
-        language_name = current_user.profile[0].language_name,
-        skill_name = current_user.profile[0].skill_name,
-        service_name = current_user.profile[0].service_name,
-        cost = current_user.profile[0].cost)
+        experiences = current_user.profile[0].experiences,
+        educations = current_user.profile[0].educations,
+        languages = current_user.profile[0].languages,
+        skills = current_user.profile[0].skills,
+        services = current_user.profile[0].services
+    )
 
 @app.route("/profile/edit/", methods=["PUT", "POST"])
 # @login_required
